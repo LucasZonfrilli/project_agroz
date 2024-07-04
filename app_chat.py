@@ -1,7 +1,6 @@
 #Import required libraries
 
 import os
-from apikey import apikey
 
 import streamlit as st
 import pandas as pd
@@ -24,7 +23,7 @@ from dotenv import load_dotenv, find_dotenv
 #git filter-branch --force --index-filter "git rm --cached --ignore-unmatch data_chat/apikey.py" --prune-empty --tag-name-filter cat -- --all
 
 
-
+apikey = st.secrets["apikey"]
 
 
 #OpenAiKey
