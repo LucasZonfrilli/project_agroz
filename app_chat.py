@@ -6,6 +6,7 @@ import streamlit as st
 import pandas as pd
 import tabulate
 
+
 from langchain_community.llms import OpenAI
 from langchain_openai import OpenAI
 from langchain_experimental.agents import create_pandas_dataframe_agent
@@ -23,12 +24,13 @@ from dotenv import load_dotenv, find_dotenv
 #git filter-branch --force --index-filter "git rm --cached --ignore-unmatch data_chat/apikey.py" --prune-empty --tag-name-filter cat -- --all
 
 
-apikey = st.secrets["apikey"]
+#from apikey import apikey
 
 
 #OpenAiKey
-os.environ['OPENAI_API_KEY'] = apikey
-load_dotenv(find_dotenv())
+os.environ['OPENAI_API_KEY'] = st.secrets["apikey"]
+#os.environ['OPENAI_API_KEY'] = apikey
+#load_dotenv(find_dotenv())
 
 #Welcome message
 st.title('Assistente de IA para Análise de Dados 👨‍🌾')
@@ -65,7 +67,7 @@ if st.session_state.clicked[1]:
         llm = OpenAI(temperature = 0)
 
         #Function sidebar
-        @st.cache_data  
+        @st.cache_resource
         def steps_eda():
             steps_eda = llm('Quais são os passos da Análise Exploratória de Dados')
             return steps_eda
@@ -75,7 +77,7 @@ if st.session_state.clicked[1]:
 
 
         #Functions main
-        @st.cache_data
+        @st.cache_resource
         def function_agent():
             st.write("**Visão Geral dos Dados**")
             st.write("The first rows of your dataset look like this?")
@@ -95,7 +97,7 @@ if st.session_state.clicked[1]:
             st.write(new_features)
             return
 
-        @st.cache_data
+        @st.cache_resource
         def function_question_variable():
             st.line_chart(df, y =[user_question_variable])
             summary_statistics = pandas_agent.run(f"Give me a summary of the statistics of user {user_question_variable}")
@@ -108,7 +110,7 @@ if st.session_state.clicked[1]:
             st.write(missing_values)
             return
         
-        @st.cache_data
+        @st.cache_resource
         def function_question_dataframe():
             dataframe_info = pandas_agent.run(user_question_dataframe)
             st.write(dataframe_info)
